@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths Worksheets</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+</head>
+<body>
+    <!-------------------- Nav Bar ----------------->
+    
+    <!----------------- All Buttons ------------->
+    <div class="row mt-5 d-print-none">
+        <div class="col-md-8 mx-auto justify-content-center text-center">
+            <button class="btn btn-primary" id="add">Addition</button>
+            <button class="btn btn-primary" id="sub">Subtraction</button>
+            <button class="btn btn-primary" id="mul">Multiplication</button>
+            <button class="btn btn-primary" id="divi">Division</button>
+        </div>
+    </div>
+    <div class="row mt-5 d-print-none">
+        <div class="col-md-8 mx-auto ">            
+            <form>
+                <div class="row">
+                    <div class="col-md-3 mx-auto">
+                        <div class="form-group">
+                            <input type="number" class="form-control" id="min-num" aria-describedby="emailHelp" placeholder="Enter Minimum Value">
+                        </div>
+                    </div>
+                    <div class="col-md-3 mx-auto">
+                        <div class="form-group">
+                            <input type="number" class="form-control" id="max-num" aria-describedby="emailHelp" placeholder="Enter Maximum Number">
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center mx-auto">
+                        <p class="btn btn-primary" id="refresh">Generate</p>
+                    </div>    
+                    <div class="col-md-3 mx-auto">
+                        <button class="btn btn-primary" id="generatePdf">Generate PDF</button>
+                    </div>    
+                </div>
+            </form>
+        </div>
+    </div>
+    <!------------------Main Table with data ------------>
+    <div class="row mt-5">
+        <div class="col-md-8 mx-auto" id="tablesOutput">
+        </div>
+    </div>
+    <script>
+        var operator="+";
+        generate(1,100,"+");
+        function clearDiv()
+        {
+            document.getElementById("tablesOutput").innerHTML="";
+            document.getElementById("max-num").value="";
+            document.getElementById("min-num").value="";
+        }
+        document.getElementById("add").addEventListener("click",()=>{
+            operator="+";
+            clearDiv();
+            generate(1,100,"+");
+        });
+        document.getElementById("sub").addEventListener("click",()=>{
+            operator="-";
+            clearDiv();
+            generate(1,100,"-");
+        });
+        document.getElementById("mul").addEventListener("click",()=>{
+            operator="*";
+            clearDiv();
+            generate(1,100,"*");
+        });
+        document.getElementById("divi").addEventListener("click",()=>{
+            operator="/";
+            clearDiv();
+            generate(1,100,"/");
+        });
+
+        document.getElementById("refresh").addEventListener("click",()=>{
+            let min = document.getElementById("min-num").value;
+            if(min=="")
+            {
+                min=0;
+            }
+            let max = document.getElementById("max-num").value;
+            if(max=="")
+            {
+                max=100;
+            }
+            generate(min,max,operator);
+        })
+        document.getElementById("generatePdf").addEventListener("click",()=>{
+            window.print();
+        })
+        function random(min,max)
+        {
+            return Math.floor((Math.random()*(max-min+1))+min);
+        }
+        function generate(min,max,operator)
+        {
+            var outputFinal='<table class="table table-bordered">';
+            for(let i=0;i<20;i++)
+            {
+                outputFinal +='<tr>';
+                for(let j=0;j<2;j++)
+                {
+                    var num1 = random(min,max);
+                    var num2 = random(min,max);
+                    outputFinal +='<td>'+num1+'</td>';
+                    
+                    if(operator=="+")
+                    {
+                        outputFinal +='<td>+</td><td>'+num2+'</td><td>';
+                        outputFinal +=Number(num2+num1);
+                    }
+                    else if(operator=="-")
+                    {
+                        outputFinal +='<td>-</td><td>'+num2+'</td><td>';
+                        outputFinal +=(num1-num2);
+                    }
+                    else if(operator=="*")
+                    {
+                        outputFinal +='<td>x</td><td>'+num2+'</td><td>';
+                        outputFinal +=(num1*num2);
+                    }
+                    else if(operator=="/")
+                    {
+                        outputFinal +='<td>/</td><td>'+num2+'</td><td>';
+                        outputFinal +=Math.floor(num1/num2);
+                    }
+                    outputFinal +='</td><td></td>';
+                }
+                outputFinal +='</tr>';
+            }
+            outputFinal+='</table>';
+            document.getElementById("tablesOutput").innerHTML=outputFinal;
+        }
+    </script>
+</body>
+</html>
